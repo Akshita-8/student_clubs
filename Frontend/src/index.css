@@ -140,4 +140,35 @@ body {
     color: red;
     font-size: 14px;
   }
+  .clubs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .club-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: left;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .club-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .club-card h3 {
+    margin: 10px 0;
+    font-size: 20px;
+  }
+  
+  .club-card p {
+    font-size: 14px;
+    color: #666;
+  }
   

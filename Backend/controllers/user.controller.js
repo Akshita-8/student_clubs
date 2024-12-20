@@ -22,15 +22,6 @@ module.exports.registerUser = async(req,res,next) =>{
     res.status(201).json({token, user});
 }
 
-// module.exports.loginUser = async(req, res, next) =>{
-//        const errors = validationResult(req);
-//        if(!errors.isEmpty()){
-//         return res.status.json({errors: errors.array()});
-//        }
-//     const {email, password} = req.body;
-//     const user = await userModel.findOne({email}).select('+password');
-// }
-
 module.exports.loginUser = async(req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

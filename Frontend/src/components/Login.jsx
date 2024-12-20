@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react';
 import axios from 'axios';
-console.log('Login page rendered'); // 
+
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -24,6 +24,15 @@ const Login = () => {
     setErrors({});
     setSuccess('');
 
+    // Basic validation for empty fields
+    if (!formData.email || !formData.password) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        general: 'Both email and password are required.',
+      }));
+      return;
+    }
+
     try {
       // Send login request to backend
       const response = await axios.post('http://localhost:4000/api/users/login', formData);
@@ -34,7 +43,7 @@ const Login = () => {
       // Display success message
       setSuccess('Login successful!');
 
-      // Redirect to another page after successful login
+      // Redirect to the homepage or another page
       window.location.href = '/'; // Adjust this based on your routing structure
     } catch (error) {
       if (error.response && error.response.data && error.response.data.errors) {
@@ -44,6 +53,10 @@ const Login = () => {
         });
         setErrors(apiErrors);
       } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          general: 'An error occurred. Please try again later.',
+        }));
         console.error('Login error', error);
       }
     }
@@ -80,14 +93,22 @@ const Login = () => {
         </div>
 
         {/* Submit Button */}
-        <button type="submit" style={{ padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', border: 'none' }}>
+        <button
+          type="submit"
+          style={{
+            padding: '10px 20px',
+            backgroundColor: '#007BFF',
+            color: 'white',
+            border: 'none',
+          }}
+        >
           Login
         </button>
       </form>
 
-      {/* Success or error message */}
-      {success && <p style={{ color: 'green', marginTop: '20px' }}>{success}</p>}
+      {/* General Error or Success message */}
       {errors.general && <p style={{ color: 'red', marginTop: '20px' }}>{errors.general}</p>}
+      {success && <p style={{ color: 'green', marginTop: '20px' }}>{success}</p>}
     </div>
   );
 };

@@ -1,10 +1,31 @@
 // eslint-disable-next-line no-unused-vars
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Register from "./Register";
-import Login from "./Login";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Register from './Register';
+import Login from './Login';
 
 const Home = () => {
+  const [clubs, setClubs] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchClubs = async () => {
+      try {
+        const response = await fetch('http://localhost:4000/api/clubs');
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setClubs(data);
+      } catch (err) {
+        console.error('Error fetching clubs:', err);
+        setError('Failed to load clubs. Please try again later.');
+      }
+    };
+
+    fetchClubs();
+  }, []);
+
   return (
     <Router>
       <div className="container">
@@ -13,19 +34,29 @@ const Home = () => {
           <h1 className="logo">Student Clubs of SVECW</h1>
           <ul className="nav-links">
             <li>
-              <Link to="/" className="nav-link">Home</Link> {/* Added Home Link */}
+              <Link to="/" className="nav-link">
+                Home
+              </Link>
             </li>
             <li>
-              <Link to="/register" className="nav-link">Register</Link>
+              <Link to="/register" className="nav-link">
+                Register
+              </Link>
             </li>
             <li>
-              <Link to="/login" className="nav-link">Login</Link>
+              <Link to="/login" className="nav-link">
+                Login
+              </Link>
             </li>
             <li>
-              <Link to="/about" className="nav-link">About</Link>
+              <Link to="/about" className="nav-link">
+                About
+              </Link>
             </li>
             <li>
-              <Link to="/contact" className="nav-link">Contact Us</Link>
+              <Link to="/contact" className="nav-link">
+                Contact Us
+              </Link>
             </li>
           </ul>
         </nav>
@@ -40,7 +71,26 @@ const Home = () => {
             <Route
               path="/"
               element={
-                <h2 className="welcome-text">Welcome to Student Clubs of SVECW!</h2>
+                <div>
+                  <h2 className="welcome-text">Welcome to Student Clubs of SVECW!</h2>
+                  {error ? (
+                    <p className="error-message">{error}</p>
+                  ) : (
+                    <div className="clubs-grid">
+                      {clubs.map((club) => (
+                        <div key={club._id} className="club-card">
+                          <h3>{club.name}</h3>
+                          <img
+                            src={club.imageUrl}
+                            alt={club.name}
+                            className="club-image"
+                          />
+                          <p>{club.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               }
             />
           </Routes>
